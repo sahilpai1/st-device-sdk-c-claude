@@ -682,6 +682,25 @@ void TC_st_mqtt_publish_qos0_success(void **state);
 void TC_st_mqtt_publish_async_connected(void **state);
 void TC_st_mqtt_change_ping_period_with_active_timers(void **state);
 void TC_st_mqtt_disconnect_while_disconnected(void **state);
+void TC_st_mqtt_yield_publish_qos2_flow(void **state);
+void TC_st_mqtt_yield_pubrec_without_pending(void **state);
+void TC_st_mqtt_yield_pubrel_without_pending(void **state);
+void TC_st_mqtt_yield_pingresp_without_pending(void **state);
+void TC_st_mqtt_yield_puback_without_pending(void **state);
+void TC_st_mqtt_yield_unsuback_without_pending(void **state);
+void TC_st_mqtt_yield_pubcomp_without_pending(void **state);
+void TC_st_mqtt_connect_with_will_flag(void **state);
+void TC_st_mqtt_connect_reserved_rc(void **state);
+void TC_st_mqtt_publish_with_work_queue(void **state);
+void TC_st_mqtt_publish_async_with_work_queue(void **state);
+void TC_st_mqtt_subscribe_bad_magic(void **state);
+void TC_st_mqtt_unsubscribe_bad_magic(void **state);
+void TC_st_mqtt_disconnect_bad_magic(void **state);
+void TC_st_mqtt_connect_bad_magic_after_packet(void **state);
+void TC_st_mqtt_disconnect_chunk_malloc_failure(void **state);
+void TC_st_mqtt_subscribe_chunk_malloc_failure(void **state);
+void TC_st_mqtt_unsubscribe_chunk_malloc_failure(void **state);
+void TC_st_mqtt_publish_chunk_malloc_failure(void **state);
 
 // TCs for iot_security_common.c
 void TC_iot_security_init_malloc_failure(void **state);
