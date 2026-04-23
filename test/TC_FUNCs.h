@@ -696,7 +696,7 @@ void TC_st_mqtt_publish_async_with_work_queue(void **state);
 void TC_st_mqtt_subscribe_bad_magic(void **state);
 void TC_st_mqtt_unsubscribe_bad_magic(void **state);
 void TC_st_mqtt_disconnect_bad_magic(void **state);
-void TC_st_mqtt_connect_bad_magic_after_packet(void **state);
+void TC_st_mqtt_connect_bad_magic(void **state);
 void TC_st_mqtt_disconnect_chunk_malloc_failure(void **state);
 void TC_st_mqtt_subscribe_chunk_malloc_failure(void **state);
 void TC_st_mqtt_unsubscribe_chunk_malloc_failure(void **state);

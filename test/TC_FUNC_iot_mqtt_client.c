@@ -1711,11 +1711,12 @@ void TC_st_mqtt_disconnect_bad_magic(void **state)
 }
 
 /*
- * st_mqtt_connect with a corrupted magic number after packet creation
- * (lines 1343-1346 of st_mqtt_connect). Inject the corruption through the
- * socket mock by failing the connect first, then corrupting.
+ * st_mqtt_connect with a corrupted client magic number must fail immediately
+ * inside _iot_mqtt_connect_net at the first magic check (line 122-123).
+ * This bails before any network I/O, so it returns fast instead of waiting
+ * on a CONNACK that will never arrive.
  */
-void TC_st_mqtt_connect_bad_magic_after_packet(void **state)
+void TC_st_mqtt_connect_bad_magic(void **state)
 {
     int err;
     st_mqtt_client client;
@@ -1736,22 +1737,13 @@ void TC_st_mqtt_connect_bad_magic_after_packet(void **state)
     broker.ssl = 1;
     conn_data.clientid = "c";
 
-    /* Network succeeds, but we corrupt the magic right before connect reads
-     * it back.  Call through with socket_status == 1 (connected) then flip
-     * magic so the magic-check arm fires. */
-    port_net_mock_reset_socket_status(1);
+    // Given: magic is invalid before st_mqtt_connect runs.
     saved_magic = c->magic;
-    port_net_mock_reset_read_stream(NULL, 0);
-
-    /* We cannot deterministically race the magic corruption; instead just
-     * exercise st_mqtt_connect with an immediately-broken connect by giving
-     * no CONNACK and a closing socket.  The network close then returns the
-     * NETWORK_ERROR path. */
-    set_mock_port_net_write_skip_buf_check(1);
-    set_mock_port_net_write_skip_len_check(1);
+    c->magic = 0xDEADBEEF;
+    // When
     err = st_mqtt_connect(client, &broker, &conn_data);
-    (void)err;
-    reset_mock_port_net_write_skip_flags();
+    // Then
+    assert_int_equal(err, E_ST_MQTT_FAILURE);
 
     c->magic = saved_magic;
     st_mqtt_destroy(client);

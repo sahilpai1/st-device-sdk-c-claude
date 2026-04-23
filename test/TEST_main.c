@@ -723,7 +723,7 @@ int TEST_FUNC_iot_mqtt_client()
         cmocka_unit_test(TC_st_mqtt_subscribe_bad_magic),
         cmocka_unit_test(TC_st_mqtt_unsubscribe_bad_magic),
         cmocka_unit_test(TC_st_mqtt_disconnect_bad_magic),
-        cmocka_unit_test(TC_st_mqtt_connect_bad_magic_after_packet),
+        cmocka_unit_test(TC_st_mqtt_connect_bad_magic),
         cmocka_unit_test(TC_st_mqtt_disconnect_chunk_malloc_failure),
         cmocka_unit_test(TC_st_mqtt_subscribe_chunk_malloc_failure),
         cmocka_unit_test(TC_st_mqtt_unsubscribe_chunk_malloc_failure),
