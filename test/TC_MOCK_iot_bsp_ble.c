@@ -196,6 +196,43 @@ iot_error_t __wrap_iot_easysetup_start_ble_advertisement(struct iot_context *ctx
     return (iot_error_t)mock_start_adv_rc;
 }
 
+/* Mock state for iot_security_manager_get_certificate */
+static int mock_get_certificate_rc = 0;
+static int mock_get_certificate_use_wrap = 0;
+
+void tc_mock_ble_set_get_certificate_rc(int rc)
+{
+    mock_get_certificate_rc = rc;
+}
+
+void tc_mock_ble_set_get_certificate_use_wrap(int use)
+{
+    mock_get_certificate_use_wrap = use;
+}
+
+iot_error_t __real_iot_security_manager_get_certificate(iot_security_context_t *context, int cert_id,
+                                                        iot_security_buffer_t *cert_buf);
+
+iot_error_t __wrap_iot_security_manager_get_certificate(iot_security_context_t *context, int cert_id,
+                                                        iot_security_buffer_t *cert_buf)
+{
+    if (!mock_get_certificate_use_wrap) {
+        return __real_iot_security_manager_get_certificate(context, cert_id, cert_buf);
+    }
+    if (mock_get_certificate_rc != 0) {
+        return (iot_error_t)mock_get_certificate_rc;
+    }
+    /* Produce a small fake certificate blob. */
+    static const unsigned char fake_cert[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+    cert_buf->len = sizeof(fake_cert);
+    cert_buf->p = (unsigned char *)malloc(cert_buf->len);
+    if (!cert_buf->p) {
+        return IOT_ERROR_MEM_ALLOC;
+    }
+    memcpy(cert_buf->p, fake_cert, cert_buf->len);
+    return IOT_ERROR_NONE;
+}
+
 static void tc_mock_ble_reset_extras(void)
 {
     mock_get_response_step = 0;
@@ -205,4 +242,6 @@ static void tc_mock_ble_reset_extras(void)
     mock_get_response_last_step = 0;
     mock_start_adv_rc = 0;
     mock_start_adv_call_count = 0;
+    mock_get_certificate_rc = 0;
+    mock_get_certificate_use_wrap = 0;
 }

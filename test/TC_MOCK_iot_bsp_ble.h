@@ -42,4 +42,8 @@ int tc_mock_ble_get_get_response_last_step(void);
 void tc_mock_ble_set_start_adv_rc(int rc);
 int tc_mock_ble_get_start_adv_call_count(void);
 
+/* iot_security_manager_get_certificate mock */
+void tc_mock_ble_set_get_certificate_rc(int rc);
+void tc_mock_ble_set_get_certificate_use_wrap(int use);
+
 #endif  // ST_DEVICE_SDK_C_TC_MOCK_IOT_BSP_BLE_H

@@ -34,6 +34,7 @@ if(ENABLE_STDK_TEST)
             TC_MOCK_iot_bsp_ble.c
             TC_FUNC_iot_easysetup_ble_msg.c
             TC_FUNC_iot_easysetup_ble.c
+            TC_FUNC_iot_easysetup_ble_ecdh.c
             )
     endif()
 
