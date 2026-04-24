@@ -61,6 +61,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_BUILD_TYPE MATCHES UnitTest)
         es_msg_dispatch
         iot_send_indication
         iot_bsp_ble_get_mtu
+        iot_easysetup_get_response
+        iot_easysetup_start_ble_advertisement
         )
 else()
     foreach(stdk_extra_cflags ${STDK_EXTRA_CFLAGS})

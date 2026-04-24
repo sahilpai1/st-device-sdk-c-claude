@@ -19,10 +19,12 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "iot_bsp_ble.h"
 #include "iot_error.h"
+#include "iot_main.h"
 #include "iot_security_common.h"
 
 #define UNUSED(x) (void)(x)
@@ -40,6 +42,10 @@ static int mock_es_msg_dispatch_call_count = 0;
 static uint8_t mock_es_msg_dispatch_last_cmd_num = 0;
 static uint8_t mock_es_msg_dispatch_last_buf_count = 0;
 
+/* Forward declarations for the extra mock state that lives below the
+ * es_msg_dispatch / indication mocks. */
+static void tc_mock_ble_reset_extras(void);
+
 void tc_mock_ble_reset(void)
 {
     mock_ble_mtu = 0;
@@ -49,6 +55,7 @@ void tc_mock_ble_reset(void)
     mock_es_msg_dispatch_call_count = 0;
     mock_es_msg_dispatch_last_cmd_num = 0;
     mock_es_msg_dispatch_last_buf_count = 0;
+    tc_mock_ble_reset_extras();
 }
 
 void tc_mock_ble_set_mtu(uint32_t mtu)
@@ -110,4 +117,92 @@ void __wrap_es_msg_dispatch(iot_security_buffer_t *buf, uint8_t buf_count, uint8
     mock_es_msg_dispatch_call_count++;
     mock_es_msg_dispatch_last_buf_count = buf_count;
     mock_es_msg_dispatch_last_cmd_num = cmd_num;
+}
+
+/* Mock state for iot_easysetup_get_response */
+static int mock_get_response_step = 0;
+static int mock_get_response_err = 0;
+static int mock_get_response_return_null = 0;
+static int mock_get_response_call_count = 0;
+static int mock_get_response_last_step = 0;
+
+void tc_mock_ble_set_get_response_step(int step)
+{
+    mock_get_response_step = step;
+}
+
+void tc_mock_ble_set_get_response_err(int err)
+{
+    mock_get_response_err = err;
+}
+
+void tc_mock_ble_set_get_response_return_null(int null)
+{
+    mock_get_response_return_null = null;
+}
+
+int tc_mock_ble_get_get_response_call_count(void)
+{
+    return mock_get_response_call_count;
+}
+
+int tc_mock_ble_get_get_response_last_step(void)
+{
+    return mock_get_response_last_step;
+}
+
+/* Wrap for iot_easysetup_get_response: emulate a response that can be steered
+ * from the test via tc_mock_ble_set_*.  The returned structure is heap
+ * allocated because the callers iot_os_free() it. */
+struct iot_easysetup_payload *__wrap_iot_easysetup_get_response(struct iot_context *ctx,
+                                                                struct iot_easysetup_payload request)
+{
+    UNUSED(ctx);
+    mock_get_response_call_count++;
+    mock_get_response_last_step = request.step;
+    if (mock_get_response_return_null) {
+        return NULL;
+    }
+    struct iot_easysetup_payload *resp =
+        (struct iot_easysetup_payload *)calloc(1, sizeof(struct iot_easysetup_payload));
+    if (!resp) {
+        return NULL;
+    }
+    resp->step = mock_get_response_step ? mock_get_response_step : request.step;
+    resp->err = mock_get_response_err;
+    resp->payload = NULL;
+    resp->payload_len = 0;
+    return resp;
+}
+
+/* Mock state for iot_easysetup_start_ble_advertisement */
+static int mock_start_adv_rc = 0;
+static int mock_start_adv_call_count = 0;
+
+void tc_mock_ble_set_start_adv_rc(int rc)
+{
+    mock_start_adv_rc = rc;
+}
+
+int tc_mock_ble_get_start_adv_call_count(void)
+{
+    return mock_start_adv_call_count;
+}
+
+iot_error_t __wrap_iot_easysetup_start_ble_advertisement(struct iot_context *ctx)
+{
+    UNUSED(ctx);
+    mock_start_adv_call_count++;
+    return (iot_error_t)mock_start_adv_rc;
+}
+
+static void tc_mock_ble_reset_extras(void)
+{
+    mock_get_response_step = 0;
+    mock_get_response_err = 0;
+    mock_get_response_return_null = 0;
+    mock_get_response_call_count = 0;
+    mock_get_response_last_step = 0;
+    mock_start_adv_rc = 0;
+    mock_start_adv_call_count = 0;
 }

@@ -1489,7 +1489,9 @@ int main(void)
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_BLE)
     {
         extern int TEST_FUNC_iot_easysetup_ble_msg(void);
+        extern int TEST_FUNC_iot_easysetup_ble(void);
         err += TEST_FUNC_iot_easysetup_ble_msg();
+        err += TEST_FUNC_iot_easysetup_ble();
     }
 #endif
     err += TEST_FUNC_iot_easysetup_st_mqtt();

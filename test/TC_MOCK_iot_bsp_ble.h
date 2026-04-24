@@ -29,4 +29,17 @@ int tc_mock_ble_get_es_msg_dispatch_call_count(void);
 uint8_t tc_mock_ble_get_es_msg_dispatch_last_cmd_num(void);
 uint8_t tc_mock_ble_get_es_msg_dispatch_last_buf_count(void);
 
+/* iot_easysetup_get_response mock controls */
+struct iot_context;
+struct iot_easysetup_payload;
+void tc_mock_ble_set_get_response_step(int step);
+void tc_mock_ble_set_get_response_err(int err);
+void tc_mock_ble_set_get_response_return_null(int null);
+int tc_mock_ble_get_get_response_call_count(void);
+int tc_mock_ble_get_get_response_last_step(void);
+
+/* iot_easysetup_start_ble_advertisement mock */
+void tc_mock_ble_set_start_adv_rc(int rc);
+int tc_mock_ble_get_start_adv_call_count(void);
+
 #endif  // ST_DEVICE_SDK_C_TC_MOCK_IOT_BSP_BLE_H

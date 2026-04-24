@@ -33,6 +33,7 @@ if(ENABLE_STDK_TEST)
         set(BLE_EXTRA_SRCS
             TC_MOCK_iot_bsp_ble.c
             TC_FUNC_iot_easysetup_ble_msg.c
+            TC_FUNC_iot_easysetup_ble.c
             )
     endif()
 
