@@ -35,6 +35,7 @@ struct iot_easysetup_payload;
 void tc_mock_ble_set_get_response_step(int step);
 void tc_mock_ble_set_get_response_err(int err);
 void tc_mock_ble_set_get_response_return_null(int null);
+void tc_mock_ble_set_get_response_use_wrap(int use);
 int tc_mock_ble_get_get_response_call_count(void);
 int tc_mock_ble_get_get_response_last_step(void);
 

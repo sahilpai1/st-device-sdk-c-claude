@@ -123,6 +123,7 @@ void __wrap_es_msg_dispatch(iot_security_buffer_t *buf, uint8_t buf_count, uint8
 static int mock_get_response_step = 0;
 static int mock_get_response_err = 0;
 static int mock_get_response_return_null = 0;
+static int mock_get_response_use_wrap = 1; /* 1 = use fake wrap, 0 = call real */
 static int mock_get_response_call_count = 0;
 static int mock_get_response_last_step = 0;
 
@@ -141,6 +142,11 @@ void tc_mock_ble_set_get_response_return_null(int null)
     mock_get_response_return_null = null;
 }
 
+void tc_mock_ble_set_get_response_use_wrap(int use)
+{
+    mock_get_response_use_wrap = use;
+}
+
 int tc_mock_ble_get_get_response_call_count(void)
 {
     return mock_get_response_call_count;
@@ -151,15 +157,19 @@ int tc_mock_ble_get_get_response_last_step(void)
     return mock_get_response_last_step;
 }
 
-/* Wrap for iot_easysetup_get_response: emulate a response that can be steered
- * from the test via tc_mock_ble_set_*.  The returned structure is heap
- * allocated because the callers iot_os_free() it. */
+struct iot_easysetup_payload *__real_iot_easysetup_get_response(struct iot_context *ctx,
+                                                                struct iot_easysetup_payload request);
+
+/* Wrap for iot_easysetup_get_response: when use_wrap=1 (default) emulate a
+ * controllable response; when use_wrap=0 call the real implementation. */
 struct iot_easysetup_payload *__wrap_iot_easysetup_get_response(struct iot_context *ctx,
                                                                 struct iot_easysetup_payload request)
 {
-    UNUSED(ctx);
     mock_get_response_call_count++;
     mock_get_response_last_step = request.step;
+    if (!mock_get_response_use_wrap) {
+        return __real_iot_easysetup_get_response(ctx, request);
+    }
     if (mock_get_response_return_null) {
         return NULL;
     }
@@ -238,6 +248,7 @@ static void tc_mock_ble_reset_extras(void)
     mock_get_response_step = 0;
     mock_get_response_err = 0;
     mock_get_response_return_null = 0;
+    mock_get_response_use_wrap = 1;
     mock_get_response_call_count = 0;
     mock_get_response_last_step = 0;
     mock_start_adv_rc = 0;

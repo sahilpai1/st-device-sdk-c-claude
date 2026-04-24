@@ -1491,9 +1491,11 @@ int main(void)
         extern int TEST_FUNC_iot_easysetup_ble_msg(void);
         extern int TEST_FUNC_iot_easysetup_ble(void);
         extern int TEST_FUNC_iot_easysetup_ble_ecdh(void);
+        extern int TEST_FUNC_iot_easysetup_d2d_ble(void);
         err += TEST_FUNC_iot_easysetup_ble_msg();
         err += TEST_FUNC_iot_easysetup_ble();
         err += TEST_FUNC_iot_easysetup_ble_ecdh();
+        err += TEST_FUNC_iot_easysetup_d2d_ble();
     }
 #endif
     err += TEST_FUNC_iot_easysetup_st_mqtt();
