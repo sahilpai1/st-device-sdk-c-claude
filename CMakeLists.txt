@@ -58,6 +58,9 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_BUILD_TYPE MATCHES UnitTest)
         port_net_write_poll
         port_net_close
         port_net_free
+        es_msg_dispatch
+        iot_send_indication
+        iot_bsp_ble_get_mtu
         )
 else()
     foreach(stdk_extra_cflags ${STDK_EXTRA_CFLAGS})

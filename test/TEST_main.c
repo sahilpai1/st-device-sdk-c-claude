@@ -1486,6 +1486,12 @@ int main(void)
     err += TEST_FUNC_iot_wt();
     err += TEST_FUNC_iot_dump_log();
     err += TEST_FUNC_iot_log_file();
+#if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_BLE)
+    {
+        extern int TEST_FUNC_iot_easysetup_ble_msg(void);
+        err += TEST_FUNC_iot_easysetup_ble_msg();
+    }
+#endif
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
     err += TEST_FUNC_iot_easysetup_httpd();

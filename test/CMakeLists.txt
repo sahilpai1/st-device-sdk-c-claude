@@ -13,6 +13,7 @@ if(ENABLE_STDK_TEST)
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/port
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/security
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/external
+                        ${st_device_sdk_c_SOURCE_DIR}/src/easysetup/ble
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/json/cJSON
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/mbedtls/mbedtls/include
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/libsodium/libsodium/src/libsodium/include
@@ -26,6 +27,13 @@ if(ENABLE_STDK_TEST)
 
     if("${CMAKE_C_FLAGS}" MATCHES "-DCONFIG_STDK_IOT_CORE_SECURITY_BACKEND_SOFTWARE")
         set(SECURITY_EXTRA_SRCS TC_FUNC_iot_security_be_bsp.c)
+    endif()
+
+    if("${CMAKE_C_FLAGS}" MATCHES "-DCONFIG_STDK_IOT_CORE_EASYSETUP_BLE")
+        set(BLE_EXTRA_SRCS
+            TC_MOCK_iot_bsp_ble.c
+            TC_FUNC_iot_easysetup_ble_msg.c
+            )
     endif()
 
     if(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
@@ -67,6 +75,7 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_security_helper_ed25519.c
                    ${SECURITY_EXTRA_SRCS}
                    ${EASYSETUP_EXTRA_SRCS}
+                   ${BLE_EXTRA_SRCS}
                    TC_FUNC_iot_wt.c
                    TC_FUNC_iot_dump_log.c
                    TC_FUNC_iot_log_file.c
