@@ -113,6 +113,25 @@ void TC_iot_wifi_ctrl_request_IOT_WIFI_MODE_STATION(void **state);
 void TC_iot_wifi_ctrl_request_failure(void **state);
 void TC_iot_wifi_ctrl_request_IOT_WIFI_MODE_SOFTAP(void **state);
 void TC_iot_cleanup_success(void **state);
+void TC_iot_get_random_id_str_null_str(void **state);
+void TC_iot_get_random_id_str_success(void **state);
+void TC_iot_get_random_id_str_mac_failure(void **state);
+void TC_iot_get_random_id_str_short_buffer(void **state);
+void TC_iot_ble_ctrl_request_null_ctx(void **state);
+void TC_iot_easysetup_request_queue_send_failure(void **state);
+void TC_iot_easysetup_request_malloc_failure(void **state);
+void TC_iot_state_update_button_invokes_status_cb(void **state);
+void TC_iot_set_st_ecode_from_conn_error_default(void **state);
+void TC_iot_update_dip_from_server_type_all_branches(void **state);
+void TC_iot_update_wifi_info_not_connected(void **state);
+void TC_iot_update_wifi_info_rate_limited(void **state);
+void TC_iot_update_child_devices_health_not_connected(void **state);
+void TC_iot_update_child_devices_health_rate_limited(void **state);
+void TC_iot_wifi_ctrl_request_null_ctx(void **state);
+void TC_iot_wifi_ctrl_request_off_set_mode_failure(void **state);
+void TC_iot_wifi_ctrl_request_scan_set_mode_failure(void **state);
+void TC_iot_wifi_ctrl_request_station_set_mode_failure(void **state);
+void TC_iot_wifi_ctrl_request_off_with_es_http_ready(void **state);
 
 // TCs for iot_uuid.c
 void TC_iot_get_uuid_from_mac(void **state);
