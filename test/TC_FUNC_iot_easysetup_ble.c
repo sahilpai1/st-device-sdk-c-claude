@@ -1003,6 +1003,62 @@ void TC_iot_easysetup_gen_payload_request_pending(void **state)
 }
 
 /*
+ * iot_easysetup_ble_task.c tests: bypass the linker --wrap by calling the real
+ * symbol directly so that the static module-globals get populated and the
+ * queued work-handler runs through iot_easysetup_ble_msg_handler.
+ */
+extern void __real_es_msg_dispatch(iot_security_buffer_t *buf, uint8_t buf_count, uint8_t cmd_num);
+
+void TC_es_msg_dispatch_real_single_buffer(void **state)
+{
+    struct iot_context *ctx = (struct iot_context *)*state;
+    iot_security_buffer_t bufs[1];
+    unsigned char data[] = "test-payload";
+    device_work_data_t drained;
+    iot_error_t err;
+
+    // Given: the real es_msg_dispatch reads the file-scope `context` global
+    context = ctx;
+    bufs[0].p = data;
+    bufs[0].len = sizeof(data) - 1;
+
+    // When: real es_msg_dispatch with a single buffer + cmd_num=0
+    __real_es_msg_dispatch(bufs, 1, 0);
+    // Then: a work item was queued for the static _es_ble_msg_handler
+    err = iot_util_queue_receive(ctx->work_queue, &drained);
+    assert_int_equal(err, IOT_ERROR_NONE);
+    assert_non_null(drained.handler);
+
+    // When: the queued handler is invoked
+    drained.handler(ctx, drained.param);
+    // Then: cmd = -1 takes the unsupported-cmd branch in iot_easysetup_ble_msg_handler
+}
+
+void TC_es_msg_dispatch_real_multi_buffer_warning(void **state)
+{
+    struct iot_context *ctx = (struct iot_context *)*state;
+    iot_security_buffer_t bufs[2];
+    unsigned char data1[] = "first-fragment";
+    unsigned char data2[] = "second-fragment";
+    device_work_data_t drained;
+    iot_error_t err;
+
+    // Given
+    context = ctx;
+    bufs[0].p = data1;
+    bufs[0].len = sizeof(data1) - 1;
+    bufs[1].p = data2;
+    bufs[1].len = sizeof(data2) - 1;
+
+    // When: dispatch with buf_count > 1 (covers the "Received data is too large" warning)
+    __real_es_msg_dispatch(bufs, 2, 0);
+    // Then: still queues a single work item (extra buffers are dropped)
+    err = iot_util_queue_receive(ctx->work_queue, &drained);
+    assert_int_equal(err, IOT_ERROR_NONE);
+    drained.handler(ctx, drained.param);
+}
+
+/*
  * Group registration
  */
 int TEST_FUNC_iot_easysetup_ble(void)
@@ -1091,6 +1147,8 @@ int TEST_FUNC_iot_easysetup_ble(void)
         cmocka_unit_test_setup_teardown(TC_iot_easysetup_ble_msg_handler_decrypt_error, _tc_ble_setup,
                                         _tc_ble_teardown),
         cmocka_unit_test_setup_teardown(TC_iot_easysetup_gen_payload_request_pending, _tc_ble_setup, _tc_ble_teardown),
+        cmocka_unit_test_setup_teardown(TC_es_msg_dispatch_real_single_buffer, _tc_ble_setup, _tc_ble_teardown),
+        cmocka_unit_test_setup_teardown(TC_es_msg_dispatch_real_multi_buffer_warning, _tc_ble_setup, _tc_ble_teardown),
     };
     return cmocka_run_group_tests_name("iot_easysetup_ble.c", tests, NULL, NULL);
 }
