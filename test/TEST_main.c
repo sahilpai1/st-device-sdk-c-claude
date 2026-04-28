@@ -1619,6 +1619,10 @@ int main(void)
     err += TEST_FUNC_iot_security_manager();
     err += TEST_FUNC_iot_security_helper();
     err += TEST_FUNC_iot_security_helper_ed25519();
+    {
+        extern int TEST_FUNC_libsodium_helper(void);
+        err += TEST_FUNC_libsodium_helper();
+    }
     err += TEST_FUNC_iot_security_software_be_bsp();
     err += TEST_FUNC_iot_wt();
     err += TEST_FUNC_iot_dump_log();

@@ -14,6 +14,7 @@ if(ENABLE_STDK_TEST)
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/security
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/external
                         ${st_device_sdk_c_SOURCE_DIR}/src/easysetup/ble
+                        ${st_device_sdk_c_SOURCE_DIR}/src/port/crypto/reference
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/json/cJSON
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/mbedtls/mbedtls/include
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/libsodium/libsodium/src/libsodium/include
@@ -76,6 +77,7 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_security_storage.c
                    TC_FUNC_iot_security_helper.c
                    TC_FUNC_iot_security_helper_ed25519.c
+                   TC_FUNC_libsodium_helper.c
                    ${SECURITY_EXTRA_SRCS}
                    ${EASYSETUP_EXTRA_SRCS}
                    ${BLE_EXTRA_SRCS}
