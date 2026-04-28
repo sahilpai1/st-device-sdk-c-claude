@@ -35,6 +35,7 @@
  * __real_iot_bsp_system_set_time_in_sec.
  */
 extern iot_error_t __real_iot_bsp_system_set_time_in_sec(time_t time_in_sec);
+extern void __real_iot_bsp_system_reboot(void);
 
 void TC_iot_bsp_get_bsp_name_returns_posix(void **state)
 {
@@ -225,4 +226,43 @@ void TC_iot_bsp_system_set_timezone_overrides_existing(void **state)
         unsetenv("TZ");
     }
     tzset();
+}
+
+void TC_iot_bsp_system_reboot_real_calls_exit(void **state)
+{
+    pid_t pid;
+    int status;
+    UNUSED(state);
+
+    // Given: real iot_bsp_system_reboot calls exit(0); fork to isolate the
+    // exit from the test runner.
+    pid = fork();
+    if (pid == 0) {
+        __real_iot_bsp_system_reboot();
+        _exit(2);
+    }
+    assert_true(pid > 0);
+    waitpid(pid, &status, 0);
+    // Then: child exited normally with status 0
+    assert_true(WIFEXITED(status));
+    assert_int_equal(WEXITSTATUS(status), 0);
+}
+
+void TC_iot_bsp_system_poweroff_calls_exit(void **state)
+{
+    pid_t pid;
+    int status;
+    UNUSED(state);
+
+    // Given: iot_bsp_system_poweroff calls exit(0); fork the test
+    pid = fork();
+    if (pid == 0) {
+        iot_bsp_system_poweroff();
+        _exit(2);
+    }
+    assert_true(pid > 0);
+    waitpid(pid, &status, 0);
+    // Then
+    assert_true(WIFEXITED(status));
+    assert_int_equal(WEXITSTATUS(status), 0);
 }

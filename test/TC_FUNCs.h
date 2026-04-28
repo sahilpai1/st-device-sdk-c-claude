@@ -689,6 +689,8 @@ void TC_iot_bsp_system_set_timezone_success(void **state);
 void TC_iot_bsp_system_set_timezone_empty_string(void **state);
 void TC_iot_bsp_system_set_timezone_other_value(void **state);
 void TC_iot_bsp_system_set_timezone_overrides_existing(void **state);
+void TC_iot_bsp_system_reboot_real_calls_exit(void **state);
+void TC_iot_bsp_system_poweroff_calls_exit(void **state);
 
 // TCs for iot_bsp_nv_data_posix.c
 void TC_iot_bsp_nv_get_data_path_wifi_prov_status(void **state);

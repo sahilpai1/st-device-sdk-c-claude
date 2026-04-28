@@ -1005,6 +1005,8 @@ int TEST_FUNC_iot_bsp_system_posix(void)
         cmocka_unit_test(TC_iot_bsp_system_set_timezone_empty_string),
         cmocka_unit_test(TC_iot_bsp_system_set_timezone_other_value),
         cmocka_unit_test(TC_iot_bsp_system_set_timezone_overrides_existing),
+        cmocka_unit_test(TC_iot_bsp_system_reboot_real_calls_exit),
+        cmocka_unit_test(TC_iot_bsp_system_poweroff_calls_exit),
     };
     return cmocka_run_group_tests_name("iot_bsp_system_posix.c", tests, NULL, NULL);
 }
