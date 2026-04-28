@@ -970,6 +970,26 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_wifi_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_wifi_init_returns_success),
+        cmocka_unit_test(TC_iot_bsp_wifi_set_mode_real_returns_success),
+        cmocka_unit_test(TC_iot_bsp_wifi_set_mode_real_null_conf),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_scan_result_real_returns_zero),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_scan_result_real_null_buffer),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_mac_real_no_iface),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_freq_returns_2_4g_only),
+        cmocka_unit_test(TC_iot_bsp_wifi_register_event_cb_returns_bad_req),
+        cmocka_unit_test(TC_iot_bsp_wifi_register_event_cb_null_cb_returns_bad_req),
+        cmocka_unit_test(TC_iot_bsp_wifi_clear_event_cb_no_crash),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_auth_mode_excludes_unsupported),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_auth_mode_consistent),
+        cmocka_unit_test(TC_iot_bsp_wifi_get_status_returns_success),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_wifi_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_system_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1215,6 +1235,7 @@ int main(void)
     err += TEST_FUNC_iot_bsp_nv_data_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_bsp_system_posix();
+    err += TEST_FUNC_iot_bsp_wifi_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
     err += TEST_FUNC_iot_easysetup_httpd();

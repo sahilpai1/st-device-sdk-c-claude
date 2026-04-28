@@ -661,6 +661,21 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_wifi_posix.c
+void TC_iot_bsp_wifi_init_returns_success(void **state);
+void TC_iot_bsp_wifi_set_mode_real_returns_success(void **state);
+void TC_iot_bsp_wifi_set_mode_real_null_conf(void **state);
+void TC_iot_bsp_wifi_get_scan_result_real_returns_zero(void **state);
+void TC_iot_bsp_wifi_get_scan_result_real_null_buffer(void **state);
+void TC_iot_bsp_wifi_get_mac_real_no_iface(void **state);
+void TC_iot_bsp_wifi_get_freq_returns_2_4g_only(void **state);
+void TC_iot_bsp_wifi_register_event_cb_returns_bad_req(void **state);
+void TC_iot_bsp_wifi_register_event_cb_null_cb_returns_bad_req(void **state);
+void TC_iot_bsp_wifi_clear_event_cb_no_crash(void **state);
+void TC_iot_bsp_wifi_get_auth_mode_excludes_unsupported(void **state);
+void TC_iot_bsp_wifi_get_auth_mode_consistent(void **state);
+void TC_iot_bsp_wifi_get_status_returns_success(void **state);
+
 // TCs for iot_bsp_system_posix.c
 void TC_iot_bsp_get_bsp_name_returns_posix(void **state);
 void TC_iot_bsp_get_bsp_name_consistent_calls(void **state);
