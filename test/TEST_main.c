@@ -970,6 +970,30 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_ble_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_ble_posix_init_with_valid_callbacks),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_init_null_callbacks),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_init_callbacks_inner_null),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_init_partial_callbacks),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_deinit_no_crash),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_start_adv_success),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_start_adv_null_mn_data),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_start_adv_null_local_name),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_start_adv_zero_length),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_start_adv_all_null),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_stop_adv_returns_zero),
+        cmocka_unit_test(TC_iot_send_indication_posix_success),
+        cmocka_unit_test(TC_iot_send_indication_posix_null_buffer),
+        cmocka_unit_test(TC_iot_send_indication_posix_zero_length),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_get_mtu_returns_zero),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_get_mac_address_success),
+        cmocka_unit_test(TC_iot_bsp_ble_posix_disconnect_returns_zero),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_ble_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_random_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1086,6 +1110,7 @@ int main(void)
     err += TEST_FUNC_iot_security_software_be_bsp();
     err += TEST_FUNC_iot_wt();
     err += TEST_FUNC_iot_dump_log();
+    err += TEST_FUNC_iot_bsp_ble_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)

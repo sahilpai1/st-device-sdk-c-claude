@@ -661,6 +661,25 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_ble_posix.c
+void TC_iot_bsp_ble_posix_init_with_valid_callbacks(void **state);
+void TC_iot_bsp_ble_posix_init_null_callbacks(void **state);
+void TC_iot_bsp_ble_posix_init_callbacks_inner_null(void **state);
+void TC_iot_bsp_ble_posix_init_partial_callbacks(void **state);
+void TC_iot_bsp_ble_posix_deinit_no_crash(void **state);
+void TC_iot_bsp_ble_posix_start_adv_success(void **state);
+void TC_iot_bsp_ble_posix_start_adv_null_mn_data(void **state);
+void TC_iot_bsp_ble_posix_start_adv_null_local_name(void **state);
+void TC_iot_bsp_ble_posix_start_adv_zero_length(void **state);
+void TC_iot_bsp_ble_posix_start_adv_all_null(void **state);
+void TC_iot_bsp_ble_posix_stop_adv_returns_zero(void **state);
+void TC_iot_send_indication_posix_success(void **state);
+void TC_iot_send_indication_posix_null_buffer(void **state);
+void TC_iot_send_indication_posix_zero_length(void **state);
+void TC_iot_bsp_ble_posix_get_mtu_returns_zero(void **state);
+void TC_iot_bsp_ble_posix_get_mac_address_success(void **state);
+void TC_iot_bsp_ble_posix_disconnect_returns_zero(void **state);
+
 // TCs for iot_bsp_random_posix.c
 void TC_iot_bsp_random_posix_first_call_initializes_seed(void **state);
 void TC_iot_bsp_random_posix_subsequent_calls(void **state);

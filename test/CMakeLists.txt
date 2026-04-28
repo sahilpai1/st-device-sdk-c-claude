@@ -60,6 +60,7 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_wt.c
                    TC_FUNC_iot_dump_log.c
                    TC_FUNC_iot_easysetup_st_mqtt.c
+                   TC_FUNC_iot_bsp_ble_posix.c
                    TC_FUNC_iot_bsp_random_posix.c
                    TC_UTIL_easysetup_common.c
 				   )
