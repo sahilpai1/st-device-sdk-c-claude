@@ -661,6 +661,30 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_fs_posix.c
+void TC_iot_bsp_fs_init_returns_success(void **state);
+void TC_iot_bsp_fs_deinit_returns_success(void **state);
+void TC_iot_bsp_fs_open_readwrite_creates_file(void **state);
+void TC_iot_bsp_fs_open_readonly_no_file(void **state);
+void TC_iot_bsp_fs_open_readonly_existing(void **state);
+void TC_iot_bsp_fs_open_invalid_path(void **state);
+void TC_iot_bsp_fs_open_empty_filename_readonly(void **state);
+void TC_iot_bsp_fs_open_empty_filename_readwrite(void **state);
+void TC_iot_bsp_fs_open_from_stnv_no_file(void **state);
+void TC_iot_bsp_fs_open_from_stnv_success(void **state);
+void TC_iot_bsp_fs_open_from_stnv_empty_filename(void **state);
+void TC_iot_bsp_fs_write_and_read_success(void **state);
+void TC_iot_bsp_fs_write_failure_invalid_fd(void **state);
+void TC_iot_bsp_fs_write_zero_length(void **state);
+void TC_iot_bsp_fs_read_no_file(void **state);
+void TC_iot_bsp_fs_read_invalid_fd(void **state);
+void TC_iot_bsp_fs_read_partial_data(void **state);
+void TC_iot_bsp_fs_close_invalid_fd(void **state);
+void TC_iot_bsp_fs_close_double_close(void **state);
+void TC_iot_bsp_fs_remove_no_file(void **state);
+void TC_iot_bsp_fs_remove_invalid_path(void **state);
+void TC_iot_bsp_fs_remove_success(void **state);
+
 // TCs for iot_bsp_debug_posix.c
 void TC_iot_bsp_debug_posix_level_info(void **state);
 void TC_iot_bsp_debug_posix_level_error(void **state);

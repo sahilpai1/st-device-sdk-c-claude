@@ -970,6 +970,35 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_fs_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_fs_init_returns_success),
+        cmocka_unit_test(TC_iot_bsp_fs_deinit_returns_success),
+        cmocka_unit_test(TC_iot_bsp_fs_open_readwrite_creates_file),
+        cmocka_unit_test(TC_iot_bsp_fs_open_readonly_no_file),
+        cmocka_unit_test(TC_iot_bsp_fs_open_readonly_existing),
+        cmocka_unit_test(TC_iot_bsp_fs_open_invalid_path),
+        cmocka_unit_test(TC_iot_bsp_fs_open_empty_filename_readonly),
+        cmocka_unit_test(TC_iot_bsp_fs_open_empty_filename_readwrite),
+        cmocka_unit_test(TC_iot_bsp_fs_open_from_stnv_no_file),
+        cmocka_unit_test(TC_iot_bsp_fs_open_from_stnv_success),
+        cmocka_unit_test(TC_iot_bsp_fs_open_from_stnv_empty_filename),
+        cmocka_unit_test(TC_iot_bsp_fs_write_and_read_success),
+        cmocka_unit_test(TC_iot_bsp_fs_write_failure_invalid_fd),
+        cmocka_unit_test(TC_iot_bsp_fs_write_zero_length),
+        cmocka_unit_test(TC_iot_bsp_fs_read_no_file),
+        cmocka_unit_test(TC_iot_bsp_fs_read_invalid_fd),
+        cmocka_unit_test(TC_iot_bsp_fs_read_partial_data),
+        cmocka_unit_test(TC_iot_bsp_fs_close_invalid_fd),
+        cmocka_unit_test(TC_iot_bsp_fs_close_double_close),
+        cmocka_unit_test(TC_iot_bsp_fs_remove_no_file),
+        cmocka_unit_test(TC_iot_bsp_fs_remove_invalid_path),
+        cmocka_unit_test(TC_iot_bsp_fs_remove_success),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_fs_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_debug_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1132,6 +1161,7 @@ int main(void)
     err += TEST_FUNC_iot_dump_log();
     err += TEST_FUNC_iot_bsp_ble_posix();
     err += TEST_FUNC_iot_bsp_debug_posix();
+    err += TEST_FUNC_iot_bsp_fs_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
