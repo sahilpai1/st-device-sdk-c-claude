@@ -970,6 +970,19 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_random_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_random_posix_first_call_initializes_seed),
+        cmocka_unit_test(TC_iot_bsp_random_posix_subsequent_calls),
+        cmocka_unit_test(TC_iot_bsp_random_posix_value_below_uint32_max),
+        cmocka_unit_test(TC_iot_bsp_random_posix_multiple_invocations_in_range),
+        cmocka_unit_test(TC_iot_bsp_random_posix_distribution_not_constant),
+        cmocka_unit_test(TC_iot_bsp_random_posix_high_byte_within_range),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_random_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_easysetup_st_mqtt(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1073,6 +1086,7 @@ int main(void)
     err += TEST_FUNC_iot_security_software_be_bsp();
     err += TEST_FUNC_iot_wt();
     err += TEST_FUNC_iot_dump_log();
+    err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
     err += TEST_FUNC_iot_easysetup_httpd();
