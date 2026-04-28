@@ -970,6 +970,26 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_debug_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_info),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_error),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_warn),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_debug),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_sensitive_info),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_none),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_level_unknown),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_empty_format),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_long_message),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_null_tag),
+        cmocka_unit_test(TC_iot_bsp_dump_posix_no_op),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_check_heap_first),
+        cmocka_unit_test(TC_iot_bsp_debug_posix_check_heap_subsequent),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_debug_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_ble_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1111,6 +1131,7 @@ int main(void)
     err += TEST_FUNC_iot_wt();
     err += TEST_FUNC_iot_dump_log();
     err += TEST_FUNC_iot_bsp_ble_posix();
+    err += TEST_FUNC_iot_bsp_debug_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)

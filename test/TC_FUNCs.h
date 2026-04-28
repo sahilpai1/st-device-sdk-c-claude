@@ -661,6 +661,21 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_debug_posix.c
+void TC_iot_bsp_debug_posix_level_info(void **state);
+void TC_iot_bsp_debug_posix_level_error(void **state);
+void TC_iot_bsp_debug_posix_level_warn(void **state);
+void TC_iot_bsp_debug_posix_level_debug(void **state);
+void TC_iot_bsp_debug_posix_level_sensitive_info(void **state);
+void TC_iot_bsp_debug_posix_level_none(void **state);
+void TC_iot_bsp_debug_posix_level_unknown(void **state);
+void TC_iot_bsp_debug_posix_empty_format(void **state);
+void TC_iot_bsp_debug_posix_long_message(void **state);
+void TC_iot_bsp_debug_posix_null_tag(void **state);
+void TC_iot_bsp_dump_posix_no_op(void **state);
+void TC_iot_bsp_debug_posix_check_heap_first(void **state);
+void TC_iot_bsp_debug_posix_check_heap_subsequent(void **state);
+
 // TCs for iot_bsp_ble_posix.c
 void TC_iot_bsp_ble_posix_init_with_valid_callbacks(void **state);
 void TC_iot_bsp_ble_posix_init_null_callbacks(void **state);
