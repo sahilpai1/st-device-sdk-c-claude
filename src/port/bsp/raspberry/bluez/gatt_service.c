@@ -656,6 +656,10 @@ void register_gatt_application(void)
     char *adapter_path = NULL;
 
     adapter_path = find_bluez_adapter();
+    if (adapter_path == NULL) {
+        IOT_ERROR("BlueZ adapter not found; cannot register GATT application");
+        return;
+    }
 
     gdbus_method_call_async((char *)BLUEZ_SERVICE_NAME, (char *)adapter_path, (char *)GATT_MNGR_INTERFACE,
                             (char *)"RegisterApplication", g_variant_new("(oa{sv})", "/org/bluez/example", NULL),

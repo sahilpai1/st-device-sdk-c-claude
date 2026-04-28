@@ -6,6 +6,14 @@
 
 2. Raspberry Pi OS (64-bit) - Debian ver: 12 (bookworm), Kernel ver: 6.6.74+rpt-rpi-v8
 
+   > **_NOTE (Debian 13 / Trixie):_** Trixie ships BlueZ 5.77+. The patches under
+   > `example/raspberry/patches/bluez/` were developed against BlueZ 5.66 and may not
+   > apply cleanly to 5.77+ — refresh them against the actual `apt-get source bluez`
+   > tree before rebuilding. Also confirm the adapter is powered before running the
+   > example (`bluetoothctl -- power on`); on a cold boot `bluetoothd` may not yet
+   > expose `org.bluez.LEAdvertisingManager1` on `/org/bluez/hci0`, which previously
+   > surfaced as `org.bluez.Error.DoesNotExist: Does not exist`.
+
 3. apt-get install git cmake libglib2.0-dev
 
 4. Stop Network Manager service. (systemctl stop NetworkManager)

@@ -38,6 +38,10 @@ static uint8_t g_manufacturer_data[31]; /* BLE AD Type : 0xFF */
 static char g_local_name[31];           /* BLE AD Type : 0x09 */
 
 static guint registration_id;
+/* Tracks whether RegisterAdvertisement has been accepted by BlueZ. Without this
+ * we issue UnregisterAdvertisement on the first stop, and BlueZ replies with
+ * org.bluez.Error.DoesNotExist ("Does not exist"). */
+static gboolean g_advertisement_registered;
 
 /* Introspection data for the service we are exporting */
 static const gchar introspection_xml[] =
@@ -200,15 +204,50 @@ void stop_advertisement_server()
     g_dbus_connection_unregister_object(get_gdbus_connection(), registration_id);
 }
 
+static void register_advertisement_cb(GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+    GError *error = NULL;
+    GVariant *value = g_dbus_connection_call_finish(get_gdbus_connection(), res, &error);
+
+    if (error) {
+        IOT_ERROR("RegisterAdvertisement failed: %s", error->message);
+        g_clear_error(&error);
+        return;
+    }
+
+    g_advertisement_registered = TRUE;
+    IOT_DEBUG("RegisterAdvertisement success");
+    g_variant_unref(value);
+}
+
+static void unregister_advertisement_cb(GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+    GError *error = NULL;
+    GVariant *value = g_dbus_connection_call_finish(get_gdbus_connection(), res, &error);
+
+    if (error) {
+        IOT_ERROR("UnregisterAdvertisement failed: %s", error->message);
+        g_clear_error(&error);
+        return;
+    }
+
+    IOT_DEBUG("UnregisterAdvertisement success");
+    g_variant_unref(value);
+}
+
 void start_advertisement()
 {
     IOT_DEBUG("advertisement: Start advertisement");
     char *adapter_path = NULL;
 
     adapter_path = find_bluez_adapter();
+    if (adapter_path == NULL) {
+        IOT_ERROR("BlueZ adapter not found; is bluetoothd running and hci0 powered?");
+        return;
+    }
     gdbus_method_call_async((char *)BLUEZ_SERVICE_NAME, adapter_path, (char *)LE_ADVERTISING_MANAGER_IFACE,
                             (char *)"RegisterAdvertisement", g_variant_new("(oa{sv})", ADVERTISEMENT_PATH, NULL),
-                            bluez_gdbus_call_async_cb, (gpointer) "RegisterAdvertisement");
+                            register_advertisement_cb, (gpointer) "RegisterAdvertisement");
     g_free(adapter_path);
 }
 
@@ -226,9 +265,19 @@ void stop_advertisement()
 {
     char *adapter_path = NULL;
 
+    if (!g_advertisement_registered) {
+        IOT_DEBUG("stop_advertisement: nothing registered, skipping UnregisterAdvertisement");
+        return;
+    }
+
     adapter_path = find_bluez_adapter();
+    if (adapter_path == NULL) {
+        IOT_ERROR("BlueZ adapter not found; cannot unregister advertisement");
+        return;
+    }
     gdbus_method_call_async((char *)BLUEZ_SERVICE_NAME, adapter_path, (char *)LE_ADVERTISING_MANAGER_IFACE,
                             (char *)"UnregisterAdvertisement", g_variant_new("(o)", ADVERTISEMENT_PATH),
-                            bluez_gdbus_call_async_cb, (gpointer) "UnregisterAdvertisement");
+                            unregister_advertisement_cb, (gpointer) "UnregisterAdvertisement");
+    g_advertisement_registered = FALSE;
     g_free(adapter_path);
 }
