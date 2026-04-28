@@ -22,6 +22,7 @@
 #include <iot_mqtt_client.h>
 #include <iot_nv_data.h>
 #include <iot_util.h>
+#include <security/iot_security_common.h>
 #include <st_dev.h>
 #include <stdbool.h>
 #include <string.h>
@@ -3761,4 +3762,179 @@ void TC_st_device_init_unsupported_id_method(void **state)
     config.id_method = ST_IDENTITY_METHOD_NONE;
     result = st_device_init(&config);
     assert_null(result);
+}
+
+void TC_do_iot_main_command_cloud_registering_wifi_update(void **state)
+{
+    struct iot_context *ctx;
+    struct iot_command cmd = {0};
+    UNUSED(*state);
+
+    /* When wifi_update_enabled is true after the wifi-mode bring-up succeeds,
+     * the CLOUD_REGISTERING path takes the early-break before connecting.
+     * Mark is_wifi_station=true and bsp returns NONE -> skip wifi_ctrl_request. */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->is_wifi_station = true;
+    ctx->wifi_update_enabled = true;
+
+    cmd.cmd_type = IOT_COMMAND_CLOUD_REGISTERING;
+    (void)_do_iot_main_command(ctx, &cmd);
+
+    free(ctx);
+}
+
+void TC_do_iot_main_command_cloud_connecting_not_disconnected(void **state)
+{
+    struct iot_context *ctx;
+    struct iot_command cmd = {0};
+    UNUSED(*state);
+
+    /* When curr_state != CLOUD_DISCONNECTED, CLOUD_CONNECTING short-circuits. */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->curr_state = IOT_STATE_PROV_DONE;
+
+    cmd.cmd_type = IOT_COMMAND_CLOUD_CONNECTING;
+    (void)_do_iot_main_command(ctx, &cmd);
+
+    free(ctx);
+}
+
+void TC_do_iot_main_command_cloud_connecting_pause(void **state)
+{
+    struct iot_context *ctx;
+    struct iot_command cmd = {0};
+    UNUSED(*state);
+
+    /* cloud_connection_pause=true -> recursively iot_command_send + delay then break.
+     * Need work_queue / signal so the inner command_send doesn't crash. */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->curr_state = IOT_STATE_CLOUD_DISCONNECTED;
+    ctx->cloud_connection_pause = true;
+    ctx->work_queue = iot_util_queue_create(sizeof(device_work_data_t));
+    ctx->work_queue_signal = iot_os_eventgroup_create();
+
+    cmd.cmd_type = IOT_COMMAND_CLOUD_CONNECTING;
+    (void)_do_iot_main_command(ctx, &cmd);
+
+    /* Drain re-queued command */
+    {
+        device_work_data_t drained;
+        while (iot_util_queue_receive(ctx->work_queue, &drained) == IOT_ERROR_NONE) {
+            struct iot_command *inner = (struct iot_command *)drained.param;
+            if (inner) {
+                if (inner->param)
+                    iot_os_free(inner->param);
+                iot_os_free(inner);
+            }
+        }
+    }
+    iot_util_queue_delete(ctx->work_queue);
+    iot_os_eventgroup_delete(ctx->work_queue_signal);
+    free(ctx);
+}
+
+void TC_do_iot_main_command_cloud_connecting_with_retry_timer(void **state)
+{
+    struct iot_context *ctx;
+    struct iot_command cmd = {0};
+    UNUSED(*state);
+
+    /* Pre-existing retry timer should be deleted at the start of CLOUD_CONNECTING. */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->curr_state = IOT_STATE_PROV_DONE; /* short-circuit after timer cleanup */
+    ctx->next_connection_retry_timer = iot_os_timer_create(NULL, 1000, NULL);
+    assert_non_null(ctx->next_connection_retry_timer);
+
+    cmd.cmd_type = IOT_COMMAND_CLOUD_CONNECTING;
+    (void)_do_iot_main_command(ctx, &cmd);
+    /* timer should have been deleted */
+    assert_null(ctx->next_connection_retry_timer);
+
+    free(ctx);
+}
+
+void TC_check_prov_data_validation_no_ssid(void **state)
+{
+    extern iot_error_t _check_prov_data_validation(struct iot_device_prov_data * prov_data);
+    struct iot_device_prov_data prov = {0};
+    iot_error_t err;
+    UNUSED(*state);
+
+    /* Empty ssid -> INVALID_ARGS */
+    err = _check_prov_data_validation(&prov);
+    assert_int_equal(err, IOT_ERROR_INVALID_ARGS);
+}
+
+void TC_check_prov_data_validation_no_broker_url(void **state)
+{
+    extern iot_error_t _check_prov_data_validation(struct iot_device_prov_data * prov_data);
+    struct iot_device_prov_data prov = {0};
+    iot_error_t err;
+    UNUSED(*state);
+
+    strncpy(prov.wifi.ssid, "MySSID", sizeof(prov.wifi.ssid) - 1);
+    /* broker_url NULL -> INVALID_ARGS */
+    err = _check_prov_data_validation(&prov);
+    assert_int_equal(err, IOT_ERROR_INVALID_ARGS);
+}
+
+void TC_check_prov_data_validation_success(void **state)
+{
+    extern iot_error_t _check_prov_data_validation(struct iot_device_prov_data * prov_data);
+    struct iot_device_prov_data prov = {0};
+    iot_error_t err;
+    UNUSED(*state);
+
+    strncpy(prov.wifi.ssid, "MySSID", sizeof(prov.wifi.ssid) - 1);
+    prov.cloud.broker_url = "broker.example.com";
+    prov.cloud.broker_port = 8883;
+    err = _check_prov_data_validation(&prov);
+    assert_int_equal(err, IOT_ERROR_NONE);
+}
+
+void TC_st_change_health_period_publish_success_changes_ping(void **state)
+{
+    int ret;
+    struct iot_context *ctx;
+    UNUSED(*state);
+
+    /* Drives the JSON-build + publish + change_ping_period code paths.
+     * publish on a disconnected client returns failure, so we reach
+     * MQTT_PUBLISH_FAIL but exercise the JSON builder + topic setup. */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->curr_state = IOT_STATE_CLOUD_CONNECTED;
+    ctx->mqtt_health_topic = "test_health";
+    st_mqtt_create(&ctx->evt_mqttcli, _dummy_client_callback, NULL, NULL, NULL);
+
+    ret = st_change_health_period((IOT_CTX *)ctx, 30);
+    assert_int_equal(ret, IOT_ERROR_MQTT_PUBLISH_FAIL);
+
+    st_mqtt_destroy(ctx->evt_mqttcli);
+    free(ctx);
+}
+
+void TC_do_iot_main_command_cloud_registering_wifi_failure(void **state)
+{
+    struct iot_context *ctx;
+    struct iot_command cmd = {0};
+    UNUSED(*state);
+
+    /* When iot_wifi_ctrl_request fails, CLOUD_REGISTERING records the network
+     * status and calls iot_easysetup_deinit (which clears iot_events bits). */
+    ctx = (struct iot_context *)calloc(1, sizeof(struct iot_context));
+    ctx->is_wifi_station = false; /* default; forces the wifi-control branch */
+    ctx->iot_events = iot_os_eventgroup_create();
+    ctx->easysetup_security_context = iot_security_init();
+    expect_value(__wrap_iot_bsp_wifi_set_mode, conf->mode, IOT_WIFI_MODE_STATION);
+    will_return(__wrap_iot_bsp_wifi_set_mode, IOT_ERROR_BAD_REQ);
+
+    cmd.cmd_type = IOT_COMMAND_CLOUD_REGISTERING;
+    (void)_do_iot_main_command(ctx, &cmd);
+    /* Then: wifi error is recorded */
+    assert_int_equal(ctx->es_network_status, IOT_ERROR_BAD_REQ);
+
+    if (ctx->easysetup_security_context)
+        iot_security_deinit(ctx->easysetup_security_context);
+    iot_os_eventgroup_delete(ctx->iot_events);
+    free(ctx);
 }

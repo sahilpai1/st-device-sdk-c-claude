@@ -788,6 +788,15 @@ int TEST_FUNC_iot_main()
         cmocka_unit_test(TC_st_info_get_server_env_no_broker),
         cmocka_unit_test(TC_st_device_init_null_device_id),
         cmocka_unit_test(TC_st_device_init_unsupported_id_method),
+        cmocka_unit_test(TC_do_iot_main_command_cloud_registering_wifi_update),
+        cmocka_unit_test(TC_do_iot_main_command_cloud_connecting_not_disconnected),
+        cmocka_unit_test(TC_do_iot_main_command_cloud_connecting_pause),
+        cmocka_unit_test(TC_do_iot_main_command_cloud_connecting_with_retry_timer),
+        cmocka_unit_test(TC_check_prov_data_validation_no_ssid),
+        cmocka_unit_test(TC_check_prov_data_validation_no_broker_url),
+        cmocka_unit_test(TC_check_prov_data_validation_success),
+        cmocka_unit_test(TC_st_change_health_period_publish_success_changes_ping),
+        cmocka_unit_test(TC_do_iot_main_command_cloud_registering_wifi_failure),
     };
     return cmocka_run_group_tests_name("iot_main.c", tests, NULL, NULL);
 }

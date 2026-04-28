@@ -512,6 +512,15 @@ void TC_st_conn_cleanup_invalid_ctx(void **state);
 void TC_st_info_get_server_env_no_broker(void **state);
 void TC_st_device_init_null_device_id(void **state);
 void TC_st_device_init_unsupported_id_method(void **state);
+void TC_do_iot_main_command_cloud_registering_wifi_update(void **state);
+void TC_do_iot_main_command_cloud_connecting_not_disconnected(void **state);
+void TC_do_iot_main_command_cloud_connecting_pause(void **state);
+void TC_do_iot_main_command_cloud_connecting_with_retry_timer(void **state);
+void TC_check_prov_data_validation_no_ssid(void **state);
+void TC_check_prov_data_validation_no_broker_url(void **state);
+void TC_check_prov_data_validation_success(void **state);
+void TC_st_change_health_period_publish_success_changes_ping(void **state);
+void TC_do_iot_main_command_cloud_registering_wifi_failure(void **state);
 
 // TCs for iot_mqtt_packet.c
 void TC_MQTTPacket_encode_single_byte_length(void **state);
