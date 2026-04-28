@@ -572,17 +572,45 @@ void TC_iot_security_ed25519_convert_seckey_success(void **state);
 // TCs for iot_security_be_bsp.c
 void TC_STATIC_iot_security_be_bsp_fs_storage_id2target_invalid_parameters(void **state);
 void TC_STATIC_iot_security_be_bsp_fs_storage_id2target_success(void **state);
+void TC_STATIC_iot_security_be_bsp_fs_storage_id2target_factory_range(void **state);
+void TC_STATIC_iot_security_be_bsp_fs_storage_id2target_serial_num(void **state);
+void TC_STATIC_iot_security_be_bsp_fs_storage_id2target_above_max(void **state);
 void TC_STATIC_iot_security_be_bsp_fs_storage_id2filename_invalid_parameters(void **state);
 void TC_STATIC_iot_security_be_bsp_fs_storage_id2filename_success(void **state);
 void TC_iot_security_be_bsp_fs_load_malloc_failure(void **state);
 void TC_iot_security_be_bsp_fs_load_invalid_parameters(void **state);
 void TC_iot_security_be_bsp_fs_load_success(void **state);
+void TC_iot_security_be_bsp_fs_load_target_di_no_callback(void **state);
+void TC_iot_security_be_bsp_fs_load_target_di_with_callback(void **state);
+void TC_iot_security_be_bsp_fs_load_realloc_failure(void **state);
+void TC_iot_security_be_bsp_fs_load_from_nv_no_file(void **state);
+void TC_iot_security_be_bsp_fs_load_invalid_id_unknown_target(void **state);
+void TC_iot_security_be_bsp_fs_load_resets_output_buffer(void **state);
+void TC_iot_security_be_bsp_fs_load_unknown_target_factory_range_invalid_id(void **state);
 void TC_iot_security_be_bsp_fs_store_invalid_parameters(void **state);
 void TC_iot_security_be_bsp_fs_store_success(void **state);
+void TC_iot_security_be_bsp_fs_store_factory_id_invalid_target(void **state);
+void TC_iot_security_be_bsp_fs_store_then_load_roundtrip_multiple(void **state);
+void TC_iot_security_be_bsp_fs_store_open_failure(void **state);
+void TC_iot_security_be_bsp_fs_load_from_nv_unknown_id(void **state);
+void TC_iot_security_be_bsp_fs_load_from_nv_id_above_max(void **state);
+void TC_iot_security_be_bsp_fs_load_read_failure_after_unlink(void **state);
 void TC_iot_security_be_bsp_fs_remove_invalid_parameters(void **state);
 void TC_iot_security_be_bsp_fs_remove_success(void **state);
+void TC_iot_security_be_bsp_fs_remove_no_file(void **state);
+void TC_iot_security_be_bsp_fs_remove_unknown_id(void **state);
+void TC_iot_security_be_bsp_fs_remove_factory_id_invalid_target(void **state);
 void TC_iot_security_be_bsp_init_null_parameters(void **state);
 void TC_iot_security_be_bsp_init_success(void **state);
+void TC_iot_security_be_bsp_init_sets_bsp_fn(void **state);
+void TC_iot_security_be_bsp_fs_load_open_failure(void **state);
+void TC_iot_security_be_bsp_fs_load_read_no_file(void **state);
+void TC_iot_security_be_bsp_fs_load_read_generic_failure(void **state);
+void TC_iot_security_be_bsp_fs_load_close_failure(void **state);
+void TC_iot_security_be_bsp_fs_store_mocked_open_failure(void **state);
+void TC_iot_security_be_bsp_fs_store_write_failure(void **state);
+void TC_iot_security_be_bsp_fs_store_close_failure(void **state);
+void TC_iot_security_be_bsp_fs_remove_underlying_failure(void **state);
 
 // TCs for iot_wt.c
 int TC_iot_wt_create_memleak_detect_setup(void **state);
@@ -660,6 +688,129 @@ void TC_es_msg_parser_VALID_GET_METHOD(void **state);
 void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
+
+// TCs for iot_bsp_wifi_posix.c
+void TC_iot_bsp_wifi_init_returns_success(void **state);
+void TC_iot_bsp_wifi_set_mode_real_returns_success(void **state);
+void TC_iot_bsp_wifi_set_mode_real_null_conf(void **state);
+void TC_iot_bsp_wifi_get_scan_result_real_returns_zero(void **state);
+void TC_iot_bsp_wifi_get_scan_result_real_null_buffer(void **state);
+void TC_iot_bsp_wifi_get_mac_real_no_iface(void **state);
+void TC_iot_bsp_wifi_get_freq_returns_2_4g_only(void **state);
+void TC_iot_bsp_wifi_register_event_cb_returns_bad_req(void **state);
+void TC_iot_bsp_wifi_register_event_cb_null_cb_returns_bad_req(void **state);
+void TC_iot_bsp_wifi_clear_event_cb_no_crash(void **state);
+void TC_iot_bsp_wifi_get_auth_mode_excludes_unsupported(void **state);
+void TC_iot_bsp_wifi_get_auth_mode_consistent(void **state);
+void TC_iot_bsp_wifi_get_status_returns_success(void **state);
+
+// TCs for iot_bsp_system_posix.c
+void TC_iot_bsp_get_bsp_name_returns_posix(void **state);
+void TC_iot_bsp_get_bsp_name_consistent_calls(void **state);
+void TC_iot_bsp_get_bsp_version_string_returns_empty(void **state);
+void TC_iot_bsp_get_bsp_version_string_consistent_calls(void **state);
+void TC_iot_bsp_system_get_time_in_sec_success(void **state);
+void TC_iot_bsp_system_get_time_in_sec_advances(void **state);
+void TC_iot_bsp_system_set_time_in_sec_negative_value(void **state);
+void TC_iot_bsp_system_set_time_in_sec_returns_invalid_when_clock_settime_fails(void **state);
+void TC_iot_bsp_system_set_timezone_success(void **state);
+void TC_iot_bsp_system_set_timezone_empty_string(void **state);
+void TC_iot_bsp_system_set_timezone_other_value(void **state);
+void TC_iot_bsp_system_set_timezone_overrides_existing(void **state);
+void TC_iot_bsp_system_reboot_real_calls_exit(void **state);
+void TC_iot_bsp_system_poweroff_calls_exit(void **state);
+
+// TCs for iot_bsp_nv_data_posix.c
+void TC_iot_bsp_nv_get_data_path_wifi_prov_status(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_ssid(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_pass(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_bssid(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_auth_type(void **state);
+void TC_iot_bsp_nv_get_data_path_cloud_prov_status(void **state);
+void TC_iot_bsp_nv_get_data_path_server_url(void **state);
+void TC_iot_bsp_nv_get_data_path_server_port(void **state);
+void TC_iot_bsp_nv_get_data_path_label(void **state);
+void TC_iot_bsp_nv_get_data_path_device_id(void **state);
+void TC_iot_bsp_nv_get_data_path_misc_info(void **state);
+void TC_iot_bsp_nv_get_data_path_private_key(void **state);
+void TC_iot_bsp_nv_get_data_path_public_key(void **state);
+void TC_iot_bsp_nv_get_data_path_root_ca_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_sub_ca_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_device_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_serial_num(void **state);
+void TC_iot_bsp_nv_get_data_path_unknown_returns_null(void **state);
+void TC_iot_bsp_nv_get_data_path_negative_index(void **state);
+void TC_iot_bsp_nv_get_data_path_out_of_range_high(void **state);
+void TC_iot_bsp_nv_get_data_path_at_max_returns_null(void **state);
+void TC_iot_bsp_nv_get_data_path_far_out_of_range(void **state);
+void TC_iot_bsp_nv_get_data_path_negative_min(void **state);
+void TC_iot_bsp_nv_get_data_path_paths_distinct(void **state);
+
+// TCs for iot_bsp_fs_posix.c
+void TC_iot_bsp_fs_init_returns_success(void **state);
+void TC_iot_bsp_fs_deinit_returns_success(void **state);
+void TC_iot_bsp_fs_open_readwrite_creates_file(void **state);
+void TC_iot_bsp_fs_open_readonly_no_file(void **state);
+void TC_iot_bsp_fs_open_readonly_existing(void **state);
+void TC_iot_bsp_fs_open_invalid_path(void **state);
+void TC_iot_bsp_fs_open_empty_filename_readonly(void **state);
+void TC_iot_bsp_fs_open_empty_filename_readwrite(void **state);
+void TC_iot_bsp_fs_open_from_stnv_no_file(void **state);
+void TC_iot_bsp_fs_open_from_stnv_success(void **state);
+void TC_iot_bsp_fs_open_from_stnv_empty_filename(void **state);
+void TC_iot_bsp_fs_write_and_read_success(void **state);
+void TC_iot_bsp_fs_write_failure_invalid_fd(void **state);
+void TC_iot_bsp_fs_write_zero_length(void **state);
+void TC_iot_bsp_fs_read_no_file(void **state);
+void TC_iot_bsp_fs_read_invalid_fd(void **state);
+void TC_iot_bsp_fs_read_partial_data(void **state);
+void TC_iot_bsp_fs_close_invalid_fd(void **state);
+void TC_iot_bsp_fs_close_double_close(void **state);
+void TC_iot_bsp_fs_remove_no_file(void **state);
+void TC_iot_bsp_fs_remove_invalid_path(void **state);
+void TC_iot_bsp_fs_remove_success(void **state);
+
+// TCs for iot_bsp_debug_posix.c
+void TC_iot_bsp_debug_posix_level_info(void **state);
+void TC_iot_bsp_debug_posix_level_error(void **state);
+void TC_iot_bsp_debug_posix_level_warn(void **state);
+void TC_iot_bsp_debug_posix_level_debug(void **state);
+void TC_iot_bsp_debug_posix_level_sensitive_info(void **state);
+void TC_iot_bsp_debug_posix_level_none(void **state);
+void TC_iot_bsp_debug_posix_level_unknown(void **state);
+void TC_iot_bsp_debug_posix_empty_format(void **state);
+void TC_iot_bsp_debug_posix_long_message(void **state);
+void TC_iot_bsp_debug_posix_null_tag(void **state);
+void TC_iot_bsp_dump_posix_no_op(void **state);
+void TC_iot_bsp_debug_posix_check_heap_first(void **state);
+void TC_iot_bsp_debug_posix_check_heap_subsequent(void **state);
+
+// TCs for iot_bsp_ble_posix.c
+void TC_iot_bsp_ble_posix_init_with_valid_callbacks(void **state);
+void TC_iot_bsp_ble_posix_init_null_callbacks(void **state);
+void TC_iot_bsp_ble_posix_init_callbacks_inner_null(void **state);
+void TC_iot_bsp_ble_posix_init_partial_callbacks(void **state);
+void TC_iot_bsp_ble_posix_deinit_no_crash(void **state);
+void TC_iot_bsp_ble_posix_start_adv_success(void **state);
+void TC_iot_bsp_ble_posix_start_adv_null_mn_data(void **state);
+void TC_iot_bsp_ble_posix_start_adv_null_local_name(void **state);
+void TC_iot_bsp_ble_posix_start_adv_zero_length(void **state);
+void TC_iot_bsp_ble_posix_start_adv_all_null(void **state);
+void TC_iot_bsp_ble_posix_stop_adv_returns_zero(void **state);
+void TC_iot_send_indication_posix_success(void **state);
+void TC_iot_send_indication_posix_null_buffer(void **state);
+void TC_iot_send_indication_posix_zero_length(void **state);
+void TC_iot_bsp_ble_posix_get_mtu_returns_zero(void **state);
+void TC_iot_bsp_ble_posix_get_mac_address_success(void **state);
+void TC_iot_bsp_ble_posix_disconnect_returns_zero(void **state);
+
+// TCs for iot_bsp_random_posix.c
+void TC_iot_bsp_random_posix_first_call_initializes_seed(void **state);
+void TC_iot_bsp_random_posix_subsequent_calls(void **state);
+void TC_iot_bsp_random_posix_value_below_uint32_max(void **state);
+void TC_iot_bsp_random_posix_multiple_invocations_in_range(void **state);
+void TC_iot_bsp_random_posix_distribution_not_constant(void **state);
+void TC_iot_bsp_random_posix_high_byte_within_range(void **state);
 
 // TCs for iot_eassetup_http.c
 void TC_iot_easysetup_gen_post_payload_NULL_IN_PAYLOAD(void **state);
