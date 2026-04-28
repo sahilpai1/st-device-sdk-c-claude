@@ -78,6 +78,7 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_security_helper.c
                    TC_FUNC_iot_security_helper_ed25519.c
                    TC_FUNC_libsodium_helper.c
+                   TC_FUNC_port_crypto_reference.c
                    ${SECURITY_EXTRA_SRCS}
                    ${EASYSETUP_EXTRA_SRCS}
                    ${BLE_EXTRA_SRCS}

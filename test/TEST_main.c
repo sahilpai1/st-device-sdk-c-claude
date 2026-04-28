@@ -1621,7 +1621,9 @@ int main(void)
     err += TEST_FUNC_iot_security_helper_ed25519();
     {
         extern int TEST_FUNC_libsodium_helper(void);
+        extern int TEST_FUNC_port_crypto_reference(void);
         err += TEST_FUNC_libsodium_helper();
+        err += TEST_FUNC_port_crypto_reference();
     }
     err += TEST_FUNC_iot_security_software_be_bsp();
     err += TEST_FUNC_iot_wt();
