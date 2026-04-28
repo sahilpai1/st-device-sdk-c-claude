@@ -1639,6 +1639,10 @@ int main(void)
     err += TEST_FUNC_iot_util();
     err += TEST_FUNC_iot_uuid();
     err += TEST_FUNC_iot_main();
+    {
+        extern int TEST_FUNC_iot_main_harness(void);
+        err += TEST_FUNC_iot_main_harness();
+    }
     err += TEST_FUNC_iot_mqtt_client();
     err += TEST_FUNC_iot_mqtt_packet();
     err += TEST_FUNC_iot_mqtt_subscribe_client();
