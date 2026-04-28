@@ -970,6 +970,25 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_system_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_get_bsp_name_returns_posix),
+        cmocka_unit_test(TC_iot_bsp_get_bsp_name_consistent_calls),
+        cmocka_unit_test(TC_iot_bsp_get_bsp_version_string_returns_empty),
+        cmocka_unit_test(TC_iot_bsp_get_bsp_version_string_consistent_calls),
+        cmocka_unit_test(TC_iot_bsp_system_get_time_in_sec_success),
+        cmocka_unit_test(TC_iot_bsp_system_get_time_in_sec_advances),
+        cmocka_unit_test(TC_iot_bsp_system_set_time_in_sec_negative_value),
+        cmocka_unit_test(TC_iot_bsp_system_set_time_in_sec_returns_invalid_when_clock_settime_fails),
+        cmocka_unit_test(TC_iot_bsp_system_set_timezone_success),
+        cmocka_unit_test(TC_iot_bsp_system_set_timezone_empty_string),
+        cmocka_unit_test(TC_iot_bsp_system_set_timezone_other_value),
+        cmocka_unit_test(TC_iot_bsp_system_set_timezone_overrides_existing),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_system_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_nv_data_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1195,6 +1214,7 @@ int main(void)
     err += TEST_FUNC_iot_bsp_fs_posix();
     err += TEST_FUNC_iot_bsp_nv_data_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
+    err += TEST_FUNC_iot_bsp_system_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
     err += TEST_FUNC_iot_easysetup_httpd();

@@ -65,6 +65,7 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_bsp_fs_posix.c
                    TC_FUNC_iot_bsp_nv_data_posix.c
                    TC_FUNC_iot_bsp_random_posix.c
+                   TC_FUNC_iot_bsp_system_posix.c
                    TC_UTIL_easysetup_common.c
 				   )
 

@@ -661,6 +661,20 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_system_posix.c
+void TC_iot_bsp_get_bsp_name_returns_posix(void **state);
+void TC_iot_bsp_get_bsp_name_consistent_calls(void **state);
+void TC_iot_bsp_get_bsp_version_string_returns_empty(void **state);
+void TC_iot_bsp_get_bsp_version_string_consistent_calls(void **state);
+void TC_iot_bsp_system_get_time_in_sec_success(void **state);
+void TC_iot_bsp_system_get_time_in_sec_advances(void **state);
+void TC_iot_bsp_system_set_time_in_sec_negative_value(void **state);
+void TC_iot_bsp_system_set_time_in_sec_returns_invalid_when_clock_settime_fails(void **state);
+void TC_iot_bsp_system_set_timezone_success(void **state);
+void TC_iot_bsp_system_set_timezone_empty_string(void **state);
+void TC_iot_bsp_system_set_timezone_other_value(void **state);
+void TC_iot_bsp_system_set_timezone_overrides_existing(void **state);
+
 // TCs for iot_bsp_nv_data_posix.c
 void TC_iot_bsp_nv_get_data_path_wifi_prov_status(void **state);
 void TC_iot_bsp_nv_get_data_path_ap_ssid(void **state);
