@@ -970,6 +970,37 @@ int TEST_FUNC_iot_dump_log(void)
     return cmocka_run_group_tests_name("iot_dump_log.c", tests, NULL, NULL);
 }
 
+int TEST_FUNC_iot_bsp_nv_data_posix(void)
+{
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_wifi_prov_status),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_ap_ssid),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_ap_pass),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_ap_bssid),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_ap_auth_type),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_cloud_prov_status),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_server_url),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_server_port),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_label),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_device_id),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_misc_info),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_private_key),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_public_key),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_root_ca_cert),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_sub_ca_cert),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_device_cert),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_serial_num),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_unknown_returns_null),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_negative_index),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_out_of_range_high),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_at_max_returns_null),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_far_out_of_range),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_negative_min),
+        cmocka_unit_test(TC_iot_bsp_nv_get_data_path_paths_distinct),
+    };
+    return cmocka_run_group_tests_name("iot_bsp_nv_data_posix.c", tests, NULL, NULL);
+}
+
 int TEST_FUNC_iot_bsp_fs_posix(void)
 {
     const struct CMUnitTest tests[] = {
@@ -1162,6 +1193,7 @@ int main(void)
     err += TEST_FUNC_iot_bsp_ble_posix();
     err += TEST_FUNC_iot_bsp_debug_posix();
     err += TEST_FUNC_iot_bsp_fs_posix();
+    err += TEST_FUNC_iot_bsp_nv_data_posix();
     err += TEST_FUNC_iot_bsp_random_posix();
     err += TEST_FUNC_iot_easysetup_st_mqtt();
 #if defined(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)

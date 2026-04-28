@@ -661,6 +661,32 @@ void TC_es_msg_parser_INVALID_GET_METHOD(void **state);
 void TC_es_msg_parser_VALID_POST_METHOD(void **state);
 void TC_es_msg_parser_INVALID_POST_METHOD(void **state);
 
+// TCs for iot_bsp_nv_data_posix.c
+void TC_iot_bsp_nv_get_data_path_wifi_prov_status(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_ssid(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_pass(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_bssid(void **state);
+void TC_iot_bsp_nv_get_data_path_ap_auth_type(void **state);
+void TC_iot_bsp_nv_get_data_path_cloud_prov_status(void **state);
+void TC_iot_bsp_nv_get_data_path_server_url(void **state);
+void TC_iot_bsp_nv_get_data_path_server_port(void **state);
+void TC_iot_bsp_nv_get_data_path_label(void **state);
+void TC_iot_bsp_nv_get_data_path_device_id(void **state);
+void TC_iot_bsp_nv_get_data_path_misc_info(void **state);
+void TC_iot_bsp_nv_get_data_path_private_key(void **state);
+void TC_iot_bsp_nv_get_data_path_public_key(void **state);
+void TC_iot_bsp_nv_get_data_path_root_ca_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_sub_ca_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_device_cert(void **state);
+void TC_iot_bsp_nv_get_data_path_serial_num(void **state);
+void TC_iot_bsp_nv_get_data_path_unknown_returns_null(void **state);
+void TC_iot_bsp_nv_get_data_path_negative_index(void **state);
+void TC_iot_bsp_nv_get_data_path_out_of_range_high(void **state);
+void TC_iot_bsp_nv_get_data_path_at_max_returns_null(void **state);
+void TC_iot_bsp_nv_get_data_path_far_out_of_range(void **state);
+void TC_iot_bsp_nv_get_data_path_negative_min(void **state);
+void TC_iot_bsp_nv_get_data_path_paths_distinct(void **state);
+
 // TCs for iot_bsp_fs_posix.c
 void TC_iot_bsp_fs_init_returns_success(void **state);
 void TC_iot_bsp_fs_deinit_returns_success(void **state);
