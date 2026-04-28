@@ -13,6 +13,8 @@ if(ENABLE_STDK_TEST)
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/port
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/security
                         ${st_device_sdk_c_SOURCE_DIR}/src/include/external
+                        ${st_device_sdk_c_SOURCE_DIR}/src/easysetup/ble
+                        ${st_device_sdk_c_SOURCE_DIR}/src/port/crypto/reference
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/json/cJSON
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/mbedtls/mbedtls/include
                         ${st_device_sdk_c_SOURCE_DIR}/src/deps/libsodium/libsodium/src/libsodium/include
@@ -26,6 +28,16 @@ if(ENABLE_STDK_TEST)
 
     if("${CMAKE_C_FLAGS}" MATCHES "-DCONFIG_STDK_IOT_CORE_SECURITY_BACKEND_SOFTWARE")
         set(SECURITY_EXTRA_SRCS TC_FUNC_iot_security_be_bsp.c)
+    endif()
+
+    if("${CMAKE_C_FLAGS}" MATCHES "-DCONFIG_STDK_IOT_CORE_EASYSETUP_BLE")
+        set(BLE_EXTRA_SRCS
+            TC_MOCK_iot_bsp_ble.c
+            TC_FUNC_iot_easysetup_ble_msg.c
+            TC_FUNC_iot_easysetup_ble.c
+            TC_FUNC_iot_easysetup_ble_ecdh.c
+            TC_FUNC_iot_easysetup_d2d_ble.c
+            )
     endif()
 
     if(CONFIG_STDK_IOT_CORE_EASYSETUP_HTTP)
@@ -48,6 +60,16 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_nv_data.c
                    TC_FUNC_iot_main.c
                    TC_FUNC_iot_mqtt_client.c
+                   TC_FUNC_iot_mqtt_packet.c
+                   TC_FUNC_iot_mqtt_subscribe_client.c
+                   TC_FUNC_iot_mqtt_serialize_publish.c
+                   TC_FUNC_iot_mqtt_unsubscribe_client.c
+                   TC_FUNC_iot_mqtt_deserialize_publish.c
+                   TC_FUNC_iot_mqtt_format.c
+                   TC_FUNC_iot_mqtt_connect_server.c
+                   TC_FUNC_iot_mqtt_subscribe_server.c
+                   TC_FUNC_iot_mqtt_unsubscribe_server.c
+                   TC_FUNC_iot_mqtt_connect_client.c
                    TC_FUNC_iot_security_common.c
                    TC_FUNC_iot_security_crypto.c
                    TC_FUNC_iot_security_ecdh.c
@@ -55,10 +77,15 @@ if(ENABLE_STDK_TEST)
                    TC_FUNC_iot_security_storage.c
                    TC_FUNC_iot_security_helper.c
                    TC_FUNC_iot_security_helper_ed25519.c
+                   TC_FUNC_libsodium_helper.c
+                   TC_FUNC_port_crypto_reference.c
+                   TC_FUNC_mbedtls_helper.c
                    ${SECURITY_EXTRA_SRCS}
                    ${EASYSETUP_EXTRA_SRCS}
+                   ${BLE_EXTRA_SRCS}
                    TC_FUNC_iot_wt.c
                    TC_FUNC_iot_dump_log.c
+                   TC_FUNC_iot_log_file.c
                    TC_FUNC_iot_easysetup_st_mqtt.c
                    TC_UTIL_easysetup_common.c
 				   )
